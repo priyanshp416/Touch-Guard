@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Touch Guard – Production Workflow Protection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Touch Guard is a secure, self-updating Windows utility that blocks critical clicks in vbm.bco.exe and keeps production workflows locked down.">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --blur: 20px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --transition-fast: 180ms ease-out;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background-color: var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, #0f172a 0, #020617 45%, #020617 100%);
+      z-index: -3;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(148,163,184,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px);
+      background-size: 90px 90px;
+      opacity: .4;
+      z-index: -2;
+    }
+
+    .cursor-light {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%),
+        rgba(56,189,248,.35),
+        rgba(168,85,247,.22),
+        transparent 60%);
+      mix-blend-mode: screen;
+    }
+
+    .page-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 20px 40px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+      font-size: .8rem;
+    }
+
+    nav a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    nav a.active {
+      color: var(--text);
+      border: 1px solid var(--accent);
+    }
+
+    .view-container {
+      position: relative;
+      min-height: 60vh;
+    }
+
+    .view {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px);
+      transition: .3s;
+    }
+
+    .view.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    h1 {
+      font-size: clamp(2.3rem, 4vw, 3rem);
+      margin-bottom: 12px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(110deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #020617;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-ghost {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.4);
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 30px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(148,163,184,.3);
+      display: flex;
+      justify-content: space-between;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="cursor-light"></div>
+
+  <div class="page-shell">
+    <header>
+      <strong>Touch Guard</strong>
+      <nav>
+        <a data-route="home" class="active">Overview</a>
+        <a data-route="features">Capabilities</a>
+        <a data-route="updates">Updates</a>
+      </nav>
+    </header>
+
+    <main class="view-container">
+      <section class="view active" data-view="home">
+        <h1>
+          Lock down <span class="gradient-text">critical clicks</span><br>
+          on production PCs.
+        </h1>
+
+        <p>
+          Touch Guard is a secure Windows utility that blocks interaction
+          in controlled regions of <strong>vbm.bco.exe</strong>.
+        </p>
+
+        <div class="hero-cta">
+          <a
+            href="mailto:support@touch-guard.net?subject=Touch%20Guard%20Installer%20Request"
+            class="btn-primary">
+            Request installer
+          </a>
+
+          <a href="#" data-route-link="features" class="btn-ghost">
+            Explore capabilities →
+          </a>
+        </div>
+      </section>
+
+      <section class="view" data-view="features">
+        <h1>Capabilities</h1>
+        <p>Overlay blocking · Tray control · Password protection · Remote updates</p>
+      </section>
+
+      <section class="view" data-view="updates">
+        <h1>Remote Updates</h1>
+        <p>Manifest-driven updates via touch-guard.net</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Touch Guard</span>
+      <span>
+        Need the full IT package?
+        <a href="mailto:support@touch-guard.net?subject=Touch%20Guard%20IT%20Package">
+          Request technical docs
+        </a>
+      </span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const cursorLight = document.querySelector(".cursor-light");
+    window.addEventListener("pointermove", e => {
+      cursorLight.style.setProperty("--mx", (e.clientX / innerWidth) * 100 + "%");
+      cursorLight.style.setProperty("--my", (e.clientY / innerHeight) * 100 + "%");
+    });
+
+    const nav = document.querySelectorAll("nav a");
+    const views = document.querySelectorAll(".view");
+
+    function show(route) {
+      nav.forEach(a => a.classList.toggle("active", a.dataset.route === route));
+      views.forEach(v => v.classList.toggle("active", v.dataset.view === route));
+    }
+
+    nav.forEach(a => a.onclick = e => {
+      e.preventDefault();
+      show(a.dataset.route);
+    });
+
+    document.querySelectorAll("[data-route-link]").forEach(a =>
+      a.onclick = e => {
+        e.preventDefault();
+        show(a.dataset.routeLink);
+      }
+    );
+  </script>
+</body>
+</html>
